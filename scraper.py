@@ -17,5 +17,12 @@ content = driver.page_source
 soup = BeautifulSoup(content)
 for element in soup.findAll(attrs={'class': 'title'}):
     name = element.find('a')
-    # Add the object of “name” to the list “results” extracts the text in the element, omitting the HTML tags.
-    results.append(name.text)
+    if name not in results:
+        # Add the object of “name” to the list “results” extracts the text in the element, omitting the HTML tags.
+        results.append(name.text)
+
+# Turns object into a two-dimensional data table.
+df = pd.DataFrame({'Names': results})
+# 'names.csv' = adding extendsion, index specific starting point in column, encode = specific format
+df.to_csv('names.csv', index=False, encoding='utf-8')
+
