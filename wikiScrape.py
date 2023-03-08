@@ -8,7 +8,7 @@ results = []
 content = driver.page_source
 soup = BeautifulSoup(content, 'html.parser')
 
-for header_element in soup.findAll(['h2', 'h3']):
+for header_element in soup.findAll(['h2', 'h4']):
     results.append(header_element.text)
 
 df = pd.DataFrame({'Text': results})

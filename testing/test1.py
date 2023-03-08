@@ -10,7 +10,6 @@ results = []
 content = driver.page_source
 soup = BeautifulSoup(content, 'html.parser')
 
-driver.quit()
 
 for element in soup.findAll(attrs='mw-body'):
     name = element.find('h2')
@@ -19,3 +18,5 @@ for element in soup.findAll(attrs='mw-body'):
 
 df = pd.DataFrame({'Names': results})
 df.to_csv('names.csv', index=False, encoding='utf-8')
+
+print("hello")
