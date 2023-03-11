@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+import time
 
 print('Please type feature you like to see')
 unfamiliar_description = input('>')
@@ -27,3 +28,11 @@ def find_jobs():
                 print(f"{description.strip()}")
                 print(f"{more_info}")
                 print(' ')
+
+
+if __name__ == '__main__':
+    while True:
+        find_jobs()
+        time_wait = 10
+        print(f'Waiting {time_wait} minutes...')
+        time.sleep(time_wait * 60)
