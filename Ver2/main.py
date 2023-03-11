@@ -1,7 +1,12 @@
 from bs4 import BeautifulSoup
 import requests
 
-html_text = requests.get('https://www.totaljobs.com/jobs/cloud?radius=10').text
+html_text = requests.get('https://www.cv-library.co.uk/cloud-jobs?us=1').text
 soup = BeautifulSoup(html_text, 'lxml')
-job = soup.find('div', class_='Wrapper-sc-11673k2-0 eHVkAX')
-company_name = job.find('div', class_='sc-fzoiQi kuzZTz')
+jobs = soup.find_all('article', attrs={'class': 'job search-card'})
+for job in jobs:
+    company_name = job.find('a', attrs={'class': 'job__company-link'})
+    if company_name:
+        print(company_name.text)
+    else:
+        print("Company name not found")
