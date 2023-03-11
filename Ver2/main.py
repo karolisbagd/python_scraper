@@ -7,6 +7,6 @@ jobs = soup.find_all('article', attrs={'class': 'job search-card'})
 for job in jobs:
     company_name = job.find('a', attrs={'class': 'job__company-link'})
     if company_name:
-        print(company_name.text)
+        print(company_name.text.replace(' ', ''))
     else:
         print("Company name not found")
