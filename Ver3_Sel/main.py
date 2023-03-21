@@ -1,15 +1,29 @@
 import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-import time
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 # 'r' convention for a prefix, role string specifying the PATH to different location
-os.environ['PATH'] += r"C:\SeleniumDrivers\chromedriver.exe"
+os.environ['PATH'] += r";C:\SeleniumDrivers\chromedriver.exe"
 driver = webdriver.Chrome()
 driver.get("http://www.automationtesting.co.uk/buttons.html")
-# Better practice, to wait and load a web browser
-driver.implicitly_wait(2)
-find_element = driver.find_element(By.ID, 'btn_one')
-find_element.click()  # Allow the click action to complete before the browser is closed
-time.sleep(5)  # Wait for 5 seconds
+
+# Wait for the element to be clickable
+find_element = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, 'btn_one')))
+find_element.click()
+
+# Wait for the alert to be present
+alert = WebDriverWait(driver, 10).until(EC.alert_is_present())
+
+# Switch to alert and get text
+text = alert.text
+
+# Close the alert
+alert.accept()
+
+# Print the text
+print(text)
+
+# Quit the driver
 driver.quit()
