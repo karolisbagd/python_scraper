@@ -2,6 +2,7 @@ import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
+
 os.environ['PATH'] += r"C:/SeleniumDrivers"
 driver = webdriver.Chrome()
 
