@@ -20,9 +20,12 @@ symbol_add.send_keys(Keys.ADD)
 time.sleep(2)
 second_num.send_keys(Keys.NUMPAD5)
 time.sleep(2)
- 
+
 # Passing CSS expression
-btn = driver.find_element(By.CSS_SELECTOR, 'button[onClick="solve()"]')
+btn = driver.find_element(By.CSS_SELECTOR, 'input[onClick="solve()"]')
+btn.click()
+time.sleep(2)
+
 
 # classes with spaces are refering to different classes
-# CSS selector is pattern to filter an element by it's styling. 
+# CSS selector is pattern to filter an element by it's styling.
