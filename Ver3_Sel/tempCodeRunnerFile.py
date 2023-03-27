@@ -34,14 +34,22 @@ time.sleep(2)
 password_field = driver.find_element(By.NAME, 'password')
 password_field.send_keys('UWL2021!@')
 
-
 # Click on the Log in button
 login_button = driver.find_element(
     By.XPATH, '//div[@data-testid="LoginForm_Login_Button"]')
 login_button.click()
+# Wait for the login process to complete
+time.sleep(2)
+
+# Click on the Profile 
+profile_button = driver.find_element(By.CSS_SELECTOR, 'a[data-testid="AppTabBar_Profile_Link"]')
+profile_button.click()
+time.sleep(2)
 
 # Wait for the login process to complete
 time.sleep(2)
+
+
 
 # Quit the browser
 driver.quit()
