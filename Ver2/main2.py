@@ -25,7 +25,7 @@ def find_jobs():
             job_title = job.find('h2', class_='job__title').text
             more_info = job.div.h2.a['href']
             if unfamiliar_description not in description:
-                # 'w' stands for Writing inside the file
+                # 'w' Writing inside the file
                 with open(f'Ver2/posts/{index}.txt', 'w') as f:
                     f.write(f"{job_title.strip()} \n")
                     f.write(f"{publish_date.strip()} \n")
@@ -38,5 +38,5 @@ if __name__ == '__main__':
     while True:
         find_jobs()
         time_wait = 10
-        print(f'Waiting {time_wait} minutes...')
-        time.sleep(time_wait * 60)
+        print(f'Waiting {time_wait} seconds...')
+        time.sleep(time_wait * 1)

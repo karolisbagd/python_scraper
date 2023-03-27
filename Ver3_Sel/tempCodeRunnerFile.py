@@ -1,31 +1,47 @@
 import os
+import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-import time
-from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-os.environ['PATH'] += r"C:/SeleniumDrivers"
+# Set the path to the chromedriver
+os.environ['PATH'] += r"C:\SeleniumDrivers\chromedriver.exe"
+
+# Create a new instance of the Chrome driver
 driver = webdriver.Chrome()
 
-driver.get('http://www.automationtesting.co.uk/calculator.html')
-driver.implicitly_wait(5)
+# Navigate to the Twitter login page
+driver.get("https://twitter.com/login")
 
-first_num = driver.find_element(By.ID, 'result')
-symbol_add = driver.find_element(By.ID, 'result')
-second_num = driver.find_element(By.ID, 'result')
+# Wait for the page to load
+driver.implicitly_wait(10)
 
-first_num.send_keys(Keys.NUMPAD5)
-time.sleep(2)
-symbol_add.send_keys(Keys.ADD)
-time.sleep(2)
-second_num.send_keys(Keys.NUMPAD5)
+# Find the email input field and enter the email address
+email_field = driver.find_element(By.CLASS_NAME, 'r-30o5oe')
+email_field.send_keys("Student_21464553@outlook.com")
 time.sleep(2)
 
-# Passing CSS expression
-btn = driver.find_element(By.CSS_SELECTOR, 'input[onClick="solve()"]')
-btn.click()
+# Click on the Next button
+next_button = driver.find_element(By.XPATH, '//span[text()="Next"]')
+next_button.click()
+
+# Wait for the password input field to become clickable and enter the password
+driver.implicitly_wait(10)
 time.sleep(2)
 
+# r-1niwhzg, or By.NAME, 'session[password]')
+password_field = driver.find_element(By.NAME, 'password')
+password_field.send_keys('UWL2021!@')
 
-# classes with spaces are refering to different classes
-# CSS selector is pattern to filter an element by it's styling.
+
+# Click on the Log in button
+login_button = driver.find_element(
+    By.XPATH, '//div[@data-testid="LoginForm_Login_Button"]')
+login_button.click()
+
+# Wait for the login process to complete
+time.sleep(2)
+
+# Quit the browser
+driver.quit()
