@@ -73,7 +73,25 @@ class Twitter(webdriver.Chrome):
             By.CSS_SELECTOR, 'a[aria-label="Profile"]')
         profile_button.click()
         time.sleep(2)
-
+        
+    def report_result(self):
+        self.find_element(By.)    
+        
+        
+        
+        
+        
     def quit_driver(self):
         # Quit the browser
         self.quit()
+   
+        
+    '''def find_tweet(self):
+        # find the tweet element and extract its date
+        tweet_element = self.find_element(By.XPATH, "//div[@data-testid='tweet']")
+        time_element = WebDriverWait(self, 10).until(EC.visibility_of_element_located((By.XPATH, "//time[@datetime]")))
+        datetime_value = time_element.get_attribute("datetime")
+        print(tweet_element,datetime_value)'''
+        # tweet_date = date_element.get_attribute("datetime"
+
+   
