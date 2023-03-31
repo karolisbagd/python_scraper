@@ -1,9 +1,10 @@
 from main import Twitter
 
-with Twitter() as bot:
-    bot.load_page()
-    bot.input_email()
-    bot.input_password()
-    bot.button_login()
-    bot.click_profile()
-    #print(len(bot.tweet_results()))  # Need to check Console?
+with Twitter() as twitter:
+    twitter.load_page()
+    twitter.input_email()
+    twitter.input_password()
+    twitter.button_login()
+    twitter.click_profile()
+    print(twitter.tweet_results())
+    twitter.quit()
