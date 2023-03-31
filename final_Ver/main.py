@@ -103,24 +103,28 @@ class SocialMedia(webdriver.Chrome):
 
 
     def facebook_login_page(self):
-        cookies_field = self.find_elements(By.XPATH, './/button[title="Only allow essential cookies"]')
-        if len(cookies_field) > 0:
-            cookies_field[0].click()
-        try:
-            email_field = WebDriverWait(self, 5).until(
-                EC.element_to_be_clickable((By.ID, 'email')))
-        except:
-            print("Could not find email field.")
-            return
+        
+        # find the element you want to click
+        cookies_field =WebDriverWait(self, 10).until(EC.invisibility_of_element_located((By.XPATH, '//div[@class="_9xo4"]')))
 
+        # wait for the blocking element to disappear
+    
+        # click the element
+        cookies_field.click()
+        
+        '''try:
+            cookies_field = self.find_element(By.XPATH, '//button[data-cookiebanner="accept_only_essential_button"]')
+            cookies_field.click()
+        except NoSuchElementException:
+            pass
+
+         # Wait for the Email input field to become clickable and enter the password
+        email_field = WebDriverWait(self, 5).until(
+            EC.element_to_be_clickable((By.ID, 'email')))
         email_field.send_keys(EMAIL)
         time.sleep(2)
 
-        try:
-            password_field = WebDriverWait(self, 5).until(
-                EC.element_to_be_clickable((By.NAME, 'password')))
-        except:
-            print("Could not find password field.")
-            return
-
-        password_field.send_keys(PASSWORD)
+        # Wait for the password input field to become clickable and enter the password
+        password_field = WebDriverWait(self, 5).until(
+            EC.element_to_be_clickable((By.NAME, 'password')))
+        password_field.send_keys(PASSWORD)'''

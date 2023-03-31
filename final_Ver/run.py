@@ -12,3 +12,4 @@ with SocialMedia() as bot:
    # bot.quit()
 
     bot.facebook_load_page()
+    bot.facebook_login_page()
