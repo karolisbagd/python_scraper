@@ -24,8 +24,16 @@ class Booking(webdriver.Chrome):
         selected_currency = self.find_element(
             By.XPATH, '//span[text()="Euro"]')
         selected_currency.click()
-       
-        
+
+    def select_place_to_go(self, place_to_go):
+        search_field = self.find_element(By.NAME, 'ss')
+        search_field.clear()
+        search_field.send_keys(place_to_go)
+
+    def click_search(self):
+        search_button = self.find_element(
+            By.CSS_SELECTOR, 'button[type=submit]')
+        search_button.click()
 
     '''def __exit__(self, exc_type, exc_val, exc_tb):
         if self.teardown:
