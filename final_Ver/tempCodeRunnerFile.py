@@ -1,10 +1,10 @@
-from main import Twitter
+from main import SocialMedia
 
-with Twitter() as bot:
+with SocialMedia() as bot:
     bot.load_page()
-    bot.input_email()
+    bot.twitter_input_email()
     bot.input_password()
-    bot.button_login()
-    bot.click_profile()
+    bot.twitter_button_login()
+    bot.twitter_click_profile()
     print(bot.tweet_results())
-    #print(len(bot.tweet_results()))  # Need to check Console?
+    # print(len(bot.tweet_results()))  # Need to check Console?

@@ -1,6 +1,6 @@
 import time
 import os
-from constant import BASE_URL, EMAIL, PASSWORD, USERNAME
+from constant import TWITTER_URL, EMAIL, PASSWORD, TWITTER_USERNAME, FACEBOOK_URL
 from selenium import webdriver  # scroll down the website
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
@@ -8,19 +8,19 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 
 
-class Twitter(webdriver.Chrome):
+class SocialMedia(webdriver.Chrome):
     def __init__(self, driver_path=r"C:\SeleniumDrivers"):
         self.driver_path = driver_path
         os.environ['PATH'] += self.driver_path
-        super(Twitter, self).__init__()
+        super(SocialMedia, self).__init__()
         self.implicitly_wait(15)
         self.maximize_window()
 
-    def load_page(self):
-        self.get(BASE_URL)
+    def twitter_load_page(self):
+        self.get(TWITTER_URL)
 
         # Find the email input field and enter the email address
-    def input_email(self):
+    def twitter_input_email(self):
         email_field = self.find_element(By.CLASS_NAME, 'r-30o5oe')
         email_field.send_keys(EMAIL)
         time.sleep(2)
@@ -28,10 +28,10 @@ class Twitter(webdriver.Chrome):
         next_button = self.find_element(By.XPATH, '//span[text()="Next"]')
         next_button.click()
 
-    def input_password(self):
+    def twitter_input_password(self):
         try:
             username_field = self.find_element(By.NAME, 'text')
-            username_field.send_keys(USERNAME)
+            username_field.send_keys(TWITTER_USERNAME)
             time.sleep(2)
             next_button = self.find_element(By.XPATH, '//span[text()="Next"]')
             next_button.click()
@@ -52,14 +52,14 @@ class Twitter(webdriver.Chrome):
             except:
                 print("Could not find password field.")
 
-    def button_login(self):
+    def twitter_button_login(self):
         login_button = self.find_element(
             By.XPATH, '//div[@data-testid="LoginForm_Login_Button"]')
         login_button.click()
         # Wait for the login process to complete
         time.sleep(2)
 
-    def click_profile(self):
+    def twitter_click_profile(self):
         # Click on Profile
         profile_button = self.find_element(
             By.CSS_SELECTOR, 'a[aria-label="Profile"]')
@@ -94,3 +94,33 @@ class Twitter(webdriver.Chrome):
 
         # Return the text of all the tweets
         return tweet_texts
+
+    # Facebook
+
+    def facebook_load_page(self):
+        self.get(FACEBOOK_URL)
+        time.sleep(10)
+
+
+    def facebook_login_page(self):
+        cookies_field = self.find_elements(By.XPATH, './/button[title="Only allow essential cookies"]')
+        if len(cookies_field) > 0:
+            cookies_field[0].click()
+        try:
+            email_field = WebDriverWait(self, 5).until(
+                EC.element_to_be_clickable((By.ID, 'email')))
+        except:
+            print("Could not find email field.")
+            return
+
+        email_field.send_keys(EMAIL)
+        time.sleep(2)
+
+        try:
+            password_field = WebDriverWait(self, 5).until(
+                EC.element_to_be_clickable((By.NAME, 'password')))
+        except:
+            print("Could not find password field.")
+            return
+
+        password_field.send_keys(PASSWORD)
