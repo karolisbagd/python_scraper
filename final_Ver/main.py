@@ -1,7 +1,7 @@
 import time
 import os
 from constant import BASE_URL, EMAIL, PASSWORD, USERNAME
-from selenium import webdriver # scroll down the website
+from selenium import webdriver  # scroll down the website
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -66,26 +66,29 @@ class Twitter(webdriver.Chrome):
         profile_button.click()
         time.sleep(2)
 
-    
     def tweet_results(self):
-       
+
         tweet_texts = []
-        
+
         # Scroll down the webpage
-        self.execute_script("window.scrollBy(0, 1000);") 
+        self.execute_script("window.scrollBy(0, 1000);")
 
         # Locate all the tweet elements on the page
-        tweet_elements = self.find_elements(By.XPATH, ".//article[@data-testid='tweet']")
+        tweet_elements = self.find_elements(
+            By.XPATH, ".//article[@data-testid='tweet']")
 
         if not tweet_elements:
             print("No tweet elements found.")
 
         for tweet_element in tweet_elements:
             try:
-                tweet_text_element = tweet_element.find_element(By.XPATH, ".//div[@data-testid='tweetText']").text
-                time_element = tweet_element.find_element(By.XPATH, ".//time[@datetime]").get_attribute("datetime")
+                tweet_text_element = tweet_element.find_element(
+                    By.XPATH, ".//div[@data-testid='tweetText']").text
+                time_element = tweet_element.find_element(
+                    By.XPATH, ".//time[@datetime]").get_attribute("datetime")
                 #datetime = time_element.get_attribute("datetime")
-                tweet_texts.append({"Text": tweet_text_element, "Tweeted on": time_element.split('T')[0]})
+                tweet_texts.append(
+                    {"Text": tweet_text_element, "Tweeted on": time_element.split('T')[0]})
             except Exception as e:
                 print(f"Error: {e}")
 
