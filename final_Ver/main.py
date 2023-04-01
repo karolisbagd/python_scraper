@@ -99,32 +99,55 @@ class SocialMedia(webdriver.Chrome):
 
     def facebook_load_page(self):
         self.get(FACEBOOK_URL)
-        time.sleep(10)
-
+        time.sleep(5)
 
     def facebook_login_page(self):
-        
-        # find the element you want to click
-        cookies_field =WebDriverWait(self, 10).until(EC.invisibility_of_element_located((By.XPATH, '//div[@class="_9xo4"]')))
-
-        # wait for the blocking element to disappear
-    
-        # click the element
-        cookies_field.click()
-        
-        '''try:
-            cookies_field = self.find_element(By.XPATH, '//button[data-cookiebanner="accept_only_essential_button"]')
+        try:
+            cookies_field = WebDriverWait(self, 5).until(EC.element_to_be_clickable(
+             (By.XPATH, "//button[@title='Only allow essential cookies']")))
+            print("Cookies declined")
             cookies_field.click()
+            time.sleep(2) 
         except NoSuchElementException:
-            pass
-
-         # Wait for the Email input field to become clickable and enter the password
-        email_field = WebDriverWait(self, 5).until(
-            EC.element_to_be_clickable((By.ID, 'email')))
+            print("Cookies pop-up not found, moving on to next step")
+            
+            
+        email_field = self.find_element(By.NAME,'email')
+        print("Email entered")
+        email_field.click()
         email_field.send_keys(EMAIL)
         time.sleep(2)
+            
+            
+        password_field = self.find_element(By.NAME,'pass')
+        print("Password entered")
+        password_field.click()
+        password_field.send_keys(PASSWORD)
+        time.sleep(2)
+        login_button = self.find_element(By.NAME,'login')
+        login_button.click()
+        print("Logging in..Please wait")
+        time.sleep(20)
+            
+            # Wait for the password input field to become clickable and enter the password
+           # password_field = WebDriverWait(self, 5).until(
+          #      EC.element_to_be_clickable((By.ID, 'passContainer')))
+        #    password_field.send_keys(PASSWORD)
+           # time.sleep(2)
 
-        # Wait for the password input field to become clickable and enter the password
-        password_field = WebDriverWait(self, 5).until(
-            EC.element_to_be_clickable((By.NAME, 'password')))
-        password_field.send_keys(PASSWORD)'''
+        '''try:
+                    cookies_field = self.find_element(By.XPATH, '//button[data-cookiebanner="accept_only_essential_button"]')
+                    cookies_field.click()
+                except NoSuchElementException:
+                    pass
+
+                # Wait for the Email input field to become clickable and enter the password
+                email_field = WebDriverWait(self, 5).until(
+                    EC.element_to_be_clickable((By.ID, 'email')))
+                email_field.send_keys(EMAIL)
+                time.sleep(2)
+
+            # Wait for the password input field to become clickable and enter the password
+                password_field = WebDriverWait(self, 5).until(
+                    EC.element_to_be_clickable((By.NAME, 'password')))
+                password_field.send_keys(PASSWORD)'''
