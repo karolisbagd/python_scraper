@@ -1,10 +1,15 @@
-from main import Twitter
+from main import SocialMedia
 
-with Twitter() as twitter:
-    twitter.load_page()
-    twitter.input_email()
-    twitter.input_password()
-    twitter.button_login()
-    twitter.click_profile()
-    print(twitter.tweet_results())
-    twitter.quit()
+with SocialMedia() as bot:
+   
+   
+   # bot.twitter_load_page()
+   # bot.twitter_input_email()
+   # bot.twitter_input_password()
+   # bot.twitter_button_login()image.png
+   # bot.twitter_click_profile()
+   # print(bot.tweet_results())
+   # bot.quit()
+
+    bot.facebook_load_page()
+    bot.facebook_login_page()
