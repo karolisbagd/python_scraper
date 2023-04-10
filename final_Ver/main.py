@@ -88,7 +88,7 @@ class SocialMedia(webdriver.Chrome):
                     By.XPATH, ".//div[@data-testid='tweetText']").text
                 time_element = tweet_element.find_element(
                     By.XPATH, ".//time[@datetime]").get_attribute("datetime")
-               
+
                 tweet_texts.append(
                     {"Text": tweet_text_element, "Tweeted on": time_element.split('T')[0]})
             except Exception as e:
@@ -129,20 +129,10 @@ class SocialMedia(webdriver.Chrome):
         print("Logging in..Please wait")
         time.sleep(20)
 
-        # Define a random x and y coordinate within the browser window
-      #  window_size = self.get_window_size()
-       # print("Account is not reachable yet, need to click the screen to activate the window")
-        # Define a random x and y coordinate within the browser window
-       # x_coord = random.randint(0, window_size['width'])
-        #y_coord = random.randint(0, window_size['height'])
-
-        # Instantiate an ActionChains object and move to the random location if mouse movement needed
         actions = ActionChains(self)
-        # actions.move_by_offset(x_coord, y_coord)
-        
+
         # Perform the click action
         actions.click().perform()
-        
 
     def facebook_click_profile(self):
         account_icon = self.find_element(
@@ -150,9 +140,38 @@ class SocialMedia(webdriver.Chrome):
         account_icon.click()
         print("Account Clicked")
         time.sleep(2)
-    
-    
-    
+
+    def scrape_posts(self):
+        post_texts = []
+
+        # Scroll down the webpage
+        self.execute_script("window.scrollBy(0, 1000);")
+
+        # Locate all the tweet elements on the page
+        post_elements = self.find_elements(
+            By.XPATH, ".//div[@data-pagelet='ProfileTimeline']")
+
+        if not post_elements:
+            print("No Facebook post elements found.")
+            
+           
+        print("Scraping post from the timeline")
+        time.sleep(2)
+        
+        for post_element in post_elements:
+            try:
+                post_text_element = post_element.find_element(
+                    By.XPATH, ".//div[@class='x11i5rnm xat24cr x1mh8g0r x1vvkbs xdj266r']").text
+                time_element = post_element.find_element(
+                    By.XPATH, ".//a[@role='link']/span").text
+                
+                post_texts.append(
+                    {"Text": post_text_element, "Posted on": time_element})
+            except Exception as e:
+                print(f"Error: {e}")
+
+        # Return the text of all the tweets
+        return post_texts
 
         # Wait for the password input field to become clickable and enter the password
         # password_field = WebDriverWait(self, 5).until(
