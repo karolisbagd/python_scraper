@@ -7,7 +7,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.action_chains import ActionChains
-import random
 
 
 class SocialMedia(webdriver.Chrome):
@@ -153,18 +152,17 @@ class SocialMedia(webdriver.Chrome):
 
         if not post_elements:
             print("No Facebook post elements found.")
-            
-           
+
         print("Scraping post from the timeline")
         time.sleep(2)
-        
+
         for post_element in post_elements:
             try:
                 post_text_element = post_element.find_element(
                     By.XPATH, ".//div[@class='x11i5rnm xat24cr x1mh8g0r x1vvkbs xdj266r']").text
                 time_element = post_element.find_element(
                     By.XPATH, ".//a[@role='link']/span").text
-                
+
                 post_texts.append(
                     {"Text": post_text_element, "Posted on": time_element})
             except Exception as e:
