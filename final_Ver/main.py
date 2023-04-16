@@ -144,7 +144,8 @@ class SocialMedia(webdriver.Chrome):
         post_texts = []
 
         # Scroll down the webpage
-        self.execute_script("window.scrollBy(0, 1000);")
+        self.execute_script("window.scrollBy(0, 700);")
+        self.implicitly_wait(5)
 
         # Locate all the tweet elements on the page
         post_elements = self.find_elements(
@@ -164,12 +165,11 @@ class SocialMedia(webdriver.Chrome):
                     By.XPATH, ".//a[@role='link']/span").text
 
                 post_texts.append(
-                    {"Text": post_text_element, "Posted on": time_element})
+                    {"Text": post_text_element, "Posted": time_element})
             except Exception as e:
                 print(f"Error: {e}")
 
-        # Return the text of all the tweets
-        return post_texts
+        return post_texts  # Return the text of all the tweets
 
         # Wait for the password input field to become clickable and enter the password
         # password_field = WebDriverWait(self, 5).until(
