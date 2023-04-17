@@ -2,7 +2,7 @@
 
 TWITTER_URL = "https://twitter.com/login"
 
-EMAIL = "Student_21464553@outlook.com"
+EMAIL = "student_21464553@outlook.com"
 
 PASSWORD = "UWL2021!@"
 
