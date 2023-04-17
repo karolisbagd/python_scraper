@@ -169,7 +169,7 @@ class SocialMedia(webdriver.Chrome):
             except Exception as e:
                 print(f"Error: {e}")
 
-        return post_texts  # Return the text of all the tweets
+        return post_texts  # Return the text of all the posts
 
         # Wait for the password input field to become clickable and enter the password
         # password_field = WebDriverWait(self, 5).until(

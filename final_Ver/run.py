@@ -2,12 +2,12 @@ from main import SocialMedia
 
 with SocialMedia() as bot:
 
-    bot.twitter_load_page()
+    '''bot.twitter_load_page()
     bot.twitter_input_email()
     bot.twitter_input_password()
     bot.twitter_button_login()
     bot.twitter_click_profile()
-    print(bot.tweet_results())
+    print(bot.tweet_results())'''
 
     print("\nChanging to Facebook\n")
 
