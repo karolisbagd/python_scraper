@@ -7,6 +7,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.action_chains import ActionChains
+import pandas as pd
+import csv
 
 
 class SocialMedia(webdriver.Chrome):
@@ -141,55 +143,30 @@ class SocialMedia(webdriver.Chrome):
         time.sleep(2)
 
     def scrape_posts(self):
-        post_texts = []
-
         # Scroll down the webpage
-        self.execute_script("window.scrollBy(0, 700);")
+        self.execute_script("window.scrollBy(0, 1200);")
         self.implicitly_wait(5)
 
-        # Locate all the tweet elements on the page
-        post_elements = self.find_elements(
-            By.XPATH, ".//div[@data-pagelet='ProfileTimeline']")
-
-        if not post_elements:
-            print("No Facebook post elements found.")
+        # Locate all the post elements on the page
+        post_elements = self.find_elements(By.XPATH, ".//div[@data-pagelet='ProfileTimeline']")
 
         print("Scraping post from the timeline")
         time.sleep(2)
 
-        for post_element in post_elements:
-            try:
-                post_text_element = post_element.find_element(
-                    By.XPATH, ".//div[@class='x11i5rnm xat24cr x1mh8g0r x1vvkbs xdj266r']").text
-                time_element = post_element.find_element(
-                    By.XPATH, ".//a[@role='link']/span").text
+        print(f"Number of post elements: {len(post_elements)}")
 
-                post_texts.append(
-                    {"Text": post_text_element, "Posted": time_element})
-            except Exception as e:
-                print(f"Error: {e}")
+        with open("results.html", "w") as f:
+            f.write("<html>\n<head>\n<title>Results</title>\n</head>\n<body>\n")
 
-        return post_texts  # Return the text of all the posts
+            for post_element in post_elements:
+                post_text_element = post_element.find_element(By.XPATH, ".//div[@class='x11i5rnm xat24cr x1mh8g0r x1vvkbs xdj266r']").text
+                self.implicitly_wait(5)
 
-        # Wait for the password input field to become clickable and enter the password
-        # password_field = WebDriverWait(self, 5).until(
-        #      EC.element_to_be_clickable((By.ID, 'passContainer')))
-        #    password_field.send_keys(PASSWORD)
-        # time.sleep(2)
+                time_element = post_element.find_element(By.XPATH, ".//a[@role='link']/span").text
+                self.implicitly_wait(5)
 
-        '''try:
-                    cookies_field = self.find_element(By.XPATH, '//button[data-cookiebanner="accept_only_essential_button"]')
-                    cookies_field.click()
-                except NoSuchElementException:
-                    pass
+                f.write("<p>Name: {}</p>\n".format(post_text_element))
+                f.write("<p>Time: {}</p>\n".format(time_element))
+                f.write("<hr>\n")
 
-                # Wait for the Email input field to become clickable and enter the password
-                email_field = WebDriverWait(self, 5).until(
-                    EC.element_to_be_clickable((By.ID, 'email')))
-                email_field.send_keys(EMAIL)
-                time.sleep(2)
-
-            # Wait for the password input field to become clickable and enter the password
-                password_field = WebDriverWait(self, 5).until(
-                    EC.element_to_be_clickable((By.NAME, 'password')))
-                password_field.send_keys(PASSWORD)'''
+            f.write("</body>\n</html>")
