@@ -86,7 +86,7 @@ class SocialMedia(webdriver.Chrome):
         self.write_to_html_file("<head>\n")
         self.write_to_html_file("</head>\n")
         self.write_to_html_file("<body>\n")
-        self.write_to_html_file("<h1>Facebook Tweets</h1>\n")
+        self.write_to_html_file("<h1>Twitter Tweets</h1>\n")
         self.execute_script("window.scrollBy(0, 1000);")
 
         try:
@@ -155,29 +155,35 @@ class SocialMedia(webdriver.Chrome):
         login_button = self.find_element(By.NAME, 'login')
         login_button.click()
         print("Logging in... Please wait")
-        time.sleep(20)
+        time.sleep(8)
 
         actions = ActionChains(self)
 
         # Perform the click action
         actions.click().perform()
+        time.sleep(2)
 
     def facebook_click_profile(self):
         account_icon = self.find_element(
-            By.XPATH, "//span[@class='x1lliihq x6ikm8r x10wlt62 x1n2onr6']")
+            By.XPATH, "//div[@class='x1rg5ohu x1n2onr6 x3ajldb x1ja2u2z']")
         account_icon.click()
         print("Account Clicked")
         time.sleep(2)
+        profile_icon = self.find_element(By.XPATH, "//div[@class='x9f619 x1n2onr6 x1ja2u2z x78zum5 xdt5ytf x193iq5w xeuugli x1r8uery x1iyjqo2 xs83m0k x150jy0e x1e558r4 xjkvuk6 x1iorvi4']")
+        profile_icon.click()
 
     def scrape_posts(self):
         self.open_html_file("a")  # Open the HTML file in append mode
+        self.write_to_html_file("<h1>Facebook Posts</h1>\n")
+
+        
         # Scroll down the webpage
-        self.execute_script("window.scrollBy(0, 1200);")
+        self.execute_script("window.scrollBy(0, 20000);")
         self.implicitly_wait(5)
 
         # Locate all the post elements on the page
         post_elements = self.find_elements(
-            By.XPATH, ".//div[@data-pagelet='ProfileTimeline']")
+            By.XPATH, ".//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']")
 
         print("Scraping posts from the timeline")
         time.sleep(2)
@@ -186,11 +192,11 @@ class SocialMedia(webdriver.Chrome):
 
         for post_element in post_elements:
             post_text_element = post_element.find_element(
-                By.XPATH, ".//div[@class='x11i5rnm xat24cr x1mh8g0r x1vvkbs xdj266r']").text
+                By.XPATH, ".//div[@class='x1swvt13 x1pi30zi xexx8yu x18d9i69']").text # This works as well x1swvt13 x1pi30zi xexx8yu x18d9i69, xdj266r x11i5rnm xat24cr x1mh8g0r x1vvkbs
             self.implicitly_wait(5)
 
             time_element = post_element.find_element(
-                By.XPATH, ".//a[@role='link']/span").text
+                By.XPATH, ".//div[@class='xu06os2 x1ok221b']").text
             self.implicitly_wait(5)
 
             self.write_to_html_file("<p>Name: {}</p>\n".format(post_text_element))
