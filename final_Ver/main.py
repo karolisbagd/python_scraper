@@ -16,6 +16,7 @@ class SocialMedia(webdriver.Chrome):
         super(SocialMedia, self).__init__()
         self.implicitly_wait(15)
         self.maximize_window()
+        
         self.html_file = None
         
     def open_html_file(self, mode):
@@ -116,15 +117,6 @@ class SocialMedia(webdriver.Chrome):
         self.end_html_file()  # Close the HTML file after writing all the tweets
 
 
-
-
-
-
-
-   #{"Text": tweet_text_element, "Tweeted on": time_element.split('T')[0]})
-
-
-
 # Facebook
 
     def facebook_load_page(self):
@@ -161,6 +153,8 @@ class SocialMedia(webdriver.Chrome):
 
         # Perform the click action
         actions.click().perform()
+        
+        
         time.sleep(2)
 
     def facebook_click_profile(self):
@@ -174,33 +168,40 @@ class SocialMedia(webdriver.Chrome):
 
     def scrape_posts(self):
         self.open_html_file("a")  # Open the HTML file in append mode
-        self.write_to_html_file("<h1>Facebook Posts</h1>\n")
+        self.write_to_html_file("<h1>Facebook Posts</h1>\n")  # Write the heading to the HTML file
 
-        
-        # Scroll down the webpage
-        self.execute_script("window.scrollBy(0, 20000);")
-        self.implicitly_wait(5)
+        num_iterations = 5  # Number of scroll iterations
+        scroll_increment = 400  # Scroll distance in pixels
+        scroll_delay = 2  # Delay between each scroll iteration
 
-        # Locate all the post elements on the page
+        for _ in range(num_iterations):
+            self.execute_script(f"window.scrollBy(0, {scroll_increment});")  # Scroll the page vertically
+            time.sleep(scroll_delay)  # Pause between scrolls
+
         post_elements = self.find_elements(
-            By.XPATH, ".//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']")
+            By.XPATH,
+            ".//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']",  # XPath to locate post elements
+        )
 
         print("Scraping posts from the timeline")
-        time.sleep(2)
+        time.sleep(2)  # Pause after scrolling
 
         print(f"Number of post elements: {len(post_elements)}")
 
         for post_element in post_elements:
             post_text_element = post_element.find_element(
-                By.XPATH, ".//div[@class='x1swvt13 x1pi30zi xexx8yu x18d9i69']").text # This works as well x1swvt13 x1pi30zi xexx8yu x18d9i69, xdj266r x11i5rnm xat24cr x1mh8g0r x1vvkbs
-            self.implicitly_wait(5)
+                By.XPATH, ".//div[@class='xdj266r x11i5rnm xat24cr x1mh8g0r x1vvkbs']"  # XPath to locate post text
+            ).text
 
+            self.implicitly_wait(5)
+ 
             time_element = post_element.find_element(
-                By.XPATH, ".//div[@class='xu06os2 x1ok221b']").text
+                By.XPATH, ".//span[@class='x1rg5ohu x6ikm8r x10wlt62 x16dsc37 xt0b8zv']"  # XPath to locate post time
+            ).text
             self.implicitly_wait(5)
 
-            self.write_to_html_file("<p>Name: {}</p>\n".format(post_text_element))
-            self.write_to_html_file("<p>Time: {}</p>\n".format(time_element))
-            self.write_to_html_file("<hr>\n")
+            self.write_to_html_file("<p>Name: {}</p>\n".format(post_text_element))  # Write post text to the HTML file
+            self.write_to_html_file("<p>Time: {}</p>\n".format(time_element))  # Write post time to the HTML file
+            self.write_to_html_file("<hr>\n")  # Add a horizontal line to separate posts
 
         self.end_html_file()  # Close the HTML file after writing all the posts
