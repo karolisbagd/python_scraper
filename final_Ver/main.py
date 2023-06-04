@@ -1,6 +1,6 @@
 import time  # Module for working with time
 import os  # Module for interacting with the operating system
-from Constant import TWITTER_URL, EMAIL, PASSWORD, TWITTER_USERNAME, FACEBOOK_URL  # Importing necessary constants from the Constant module
+from Constant import TWITTER_URL, EMAIL, PASSWORD, TWITTER_USERNAME, FACEBOOK_URL, EMAIL2  # Importing necessary constants from the Constant module
 from selenium import webdriver  # Main module for web automation and testing tasks
 from selenium.webdriver.support.wait import WebDriverWait  # Used for waiting a certain amount of time or until a condition is met
 from selenium.webdriver.common.by import By  # Allows to refer to elements by different methods (ID, XPath, etc.)
@@ -44,23 +44,26 @@ class SocialMedia(webdriver.Chrome):  # Define a class named SocialMedia that in
         self.get(TWITTER_URL)
 
     def twitter_input_email(self):
-        email_field = self.find_element(By.CLASS_NAME, 'r-30o5oe')
-        email_field.send_keys(EMAIL)
-        time.sleep(2)
-        next_button = self.find_element(By.XPATH, '//span[text()="Next"]')
-        next_button.click()
+        WebDriverWait(self, 10).until(
+        EC.presence_of_element_located((By.CLASS_NAME, 'r-30o5oe'))
+        ).send_keys(EMAIL)
+
+        WebDriverWait(self, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '//span[text()="Next"]'))
+        ).click()
 
     def twitter_input_password(self):  # Method to input Twitter password
         try:  # Try to find and interact with the username and password fields
             username_field = self.find_element(By.NAME, 'text')  # Find the username field
             username_field.send_keys(TWITTER_USERNAME)  # Input the Twitter username
-            time.sleep(2)  # Pause for 2 seconds
+           
             next_button = self.find_element(By.XPATH, '//span[text()="Next"]')  # Find the "Next" button
             next_button.click()  # Click the "Next" button
-            time.sleep(2)  # Pause for 2 seconds
+            
             # Wait until the password field is clickable and then find it
             password_field = WebDriverWait(self, 5).until(EC.element_to_be_clickable((By.NAME, 'password')))
             password_field.send_keys(PASSWORD)  # Input the password
+            
         except NoSuchElementException:  # If a NoSuchElementException occurs
             try:  # Try to find the password field again
                 # Wait until the password field is clickable and then find it
@@ -70,16 +73,14 @@ class SocialMedia(webdriver.Chrome):  # Define a class named SocialMedia that in
                 print("Could not find password field.")  # Print an error message
                 
     def twitter_button_login(self):
-        login_button = self.find_element(
-            By.XPATH, '//div[@data-testid="LoginForm_Login_Button"]')
+        login_button = WebDriverWait(self, 5).until(
+        EC.element_to_be_clickable((By.XPATH, '//div[@data-testid="LoginForm_Login_Button"]')))
         login_button.click()
-        time.sleep(2)
 
     def twitter_click_profile(self):
-        profile_button = self.find_element(
-            By.CSS_SELECTOR, 'a[aria-label="Profile"]')
+        profile_button = WebDriverWait(self, 5).until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, 'a[aria-label="Profile"]')))
         profile_button.click()
-        time.sleep(2)
 
     def tweet_results(self):  # Method to tweet results
         self.open_html_file("w")  # Open the HTML file in write mode
@@ -106,8 +107,8 @@ class SocialMedia(webdriver.Chrome):  # Define a class named SocialMedia that in
                 time_element = tweet_element.find_element(
                     By.XPATH, ".//time").get_attribute("datetime")
 
-                self.write_to_html_file("<p>Name: {}</p>\n".format(tweet_text_element))
-                self.write_to_html_file("<p>Time: {}</p>\n".format(time_element.split('T')[0]))
+                self.write_to_html_file("<p>Text: {}</p>\n".format(tweet_text_element))
+                self.write_to_html_file("<p>Date: {}</p>\n".format(time_element.split('T')[0]))
                 self.write_to_html_file("<hr>\n")
             except Exception as e:  # If an Exception occurs
                 print(f"Error while processing tweet: {e}")  # Print the error message
@@ -123,33 +124,32 @@ class SocialMedia(webdriver.Chrome):  # Define a class named SocialMedia that in
 
     def facebook_load_page(self):  # This method loads the Facebook page
         self.get(FACEBOOK_URL)  # It uses Selenium's get method to navigate to the URL defined as FACEBOOK_URL
-        time.sleep(5)  # It then pauses for 5 seconds to let the page load
+        # time.sleep(5)  # It then pauses for 5 seconds to let the page load
 
-    def facebook_login_page(self):  # This method logs into the Facebook page
-        try:  # It first tries to handle the cookies pop-up
-            # It waits for the cookies decline button to be clickable, and then clicks it
+    def facebook_login_page(self):   # This method logs into the Facebook page
+        try:                         # It first tries to handle the cookies pop-up
+             # It waits for the cookies decline button to be clickable, and then clicks it
             cookies_field = WebDriverWait(self, 5).until(EC.element_to_be_clickable((By.XPATH, "//button[@title='Decline optional cookies']")))
             print("Cookies declined")  # It prints a success message
-            cookies_field.click()  # It clicks the cookies decline button
-            time.sleep(2)  # It pauses for 2 seconds
-        except NoSuchElementException:  # If the cookies pop-up isn't found
-            print("Cookies pop-up not found, moving on to the next step")  # It prints a message and proceeds to the next steps
+            cookies_field.click()      # It clicks the cookies decline button
+            WebDriverWait(self, 2).until(EC.staleness_of(cookies_field)) 
+        except NoSuchElementException:    # If the cookies pop-up isn't found
+            print("Cookies pop-up not found, moving on to the next step")     # It prints a message and proceeds to the next steps
 
-        email_field = self.find_element(By.NAME, 'email')
-        print("Email entered")
+        email_field = WebDriverWait(self, 10).until(EC.presence_of_element_located((By.NAME, 'email')))
         email_field.click()
-        email_field.send_keys(EMAIL)
-        time.sleep(2)
+        email_field.send_keys(EMAIL2)
+        print("Email entered")
 
-        password_field = self.find_element(By.NAME, 'pass')
-        print("Password entered")
+        password_field = WebDriverWait(self, 10).until(EC.presence_of_element_located((By.NAME, 'pass')))
         password_field.click()
         password_field.send_keys(PASSWORD)
-        time.sleep(2)
-        login_button = self.find_element(By.NAME, 'login')
+        print("Password entered")
+
+        login_button = WebDriverWait(self, 10).until(EC.presence_of_element_located((By.NAME, 'login')))
         login_button.click()
         print("Logging in... Please wait")
-        time.sleep(8)
+        WebDriverWait(self, 8).until(EC.staleness_of(login_button))
 
         actions = ActionChains(self)
 
@@ -157,7 +157,6 @@ class SocialMedia(webdriver.Chrome):  # Define a class named SocialMedia that in
         actions.click().perform()
         
         
-        time.sleep(2)
 
     def facebook_click_profile(self):  # This method navigates to the Facebook profile
         # It first finds the account icon
@@ -188,7 +187,6 @@ class SocialMedia(webdriver.Chrome):  # Define a class named SocialMedia that in
         )
 
         print("Scraping posts from the timeline")
-        time.sleep(2)  # Pause after scrolling
 
         print(f"Number of post elements: {len(post_elements)}")
 
@@ -197,16 +195,16 @@ class SocialMedia(webdriver.Chrome):  # Define a class named SocialMedia that in
             post_text_element = post_element.find_element(
                 By.XPATH, ".//div[@class='xdj266r x11i5rnm xat24cr x1mh8g0r x1vvkbs']"  # XPath to locate post text
             ).text
-
             self.implicitly_wait(5)
  
             time_element = post_element.find_element(
-                By.XPATH, ".//span[@class='x1rg5ohu x6ikm8r x10wlt62 x16dsc37 xt0b8zv']"  # XPath to locate post time
+                By.XPATH, ".//a[@role='link' and @class='x1i10hfl xjbqb8w x6umtig x1b1mbwd xaqea5y xav7gou x9f619 x1ypdohk xt0psk2 xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x16tdsg8 x1hl2dhg xggy1nq x1a2a7pz x1heor9g xt0b8zv xo1l8bm']//span"  # XPath to locate post time
             ).text
+
             self.implicitly_wait(5)
 
-            self.write_to_html_file("<p>Name: {}</p>\n".format(post_text_element))  # It writes the post text to the HTML file
-            self.write_to_html_file("<p>Time: {}</p>\n".format(time_element))  # It writes the post time to the HTML file
+            self.write_to_html_file("<p>Text: {}</p>\n".format(post_text_element))  # It writes the post text to the HTML file
+            self.write_to_html_file("<p>Date: {}</p>\n".format(time_element))  # It writes the post date to the HTML file
             self.write_to_html_file("<hr>\n")  # It adds a horizontal line to separate posts
 
         self.end_html_file()  # It closes the HTML file after writing all the posts
