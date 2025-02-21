@@ -2,7 +2,7 @@ TWITTER_URL = "https://twitter.com/login"
 
 EMAIL = "student_21464553@outlook.com"
 
-PASSWORD = os.environ.get("UWL2021!@")
+PASSWORD = os.environ.get("")
 
 TWITTER_USERNAME = "S2146455365372"
 
